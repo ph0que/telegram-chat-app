@@ -1,0 +1,27 @@
+{
+  "name": "telegram-chat-app",
+  "version": "1.0.0",
+  "description": "Telegram-like chat application with React frontend and FastAPI backend",
+  "main": "index.js",
+  "scripts": {
+  "backend": "cd backend && ..\\venv\\Scripts\\python.exe -m uvicorn main:app --reload --host 0.0.0.0 --port 8000",
+  "frontend": "cd frontend && npm run dev",
+  "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+  "test": "echo \"Error: no test specified\" && exit 1"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ph0que/telegram-chat-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ph0que/telegram-chat-app/issues"
+  },
+  "homepage": "https://github.com/ph0que/telegram-chat-app#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
