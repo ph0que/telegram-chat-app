@@ -58,3 +58,8 @@ backend/ — код FastAPI, файл main.py, модели и ручки API.�
 frontend/ — React‑приложение (Vite, TypeScript), компоненты интерфейса.​
 
 PLAN.md / REVIEW.md — план и заметки по реализации тестового задания.
+
+## Demo
+
+Frontend: https://telegram-chat-app-97tg.vercel.app/  
+Backend: http://localhost:8000
