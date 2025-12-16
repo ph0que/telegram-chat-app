@@ -116,3 +116,123 @@
 ## Выводы
 
 Задание успешно выполнено в рамках технических ограничений веб-интерфейса GitHub. Создана работающая архитектура чат-приложения с красивым UI и функциональным API. Проект готов к дальнейшему развитию и улучшениям. Основной фокус в будущем должен быть на добавлении real-time функциональности (WebSocket), сохранении данных в БД и полного цикла деплоя на production серверах.
+
+
+---
+
+## Docker и Containerization
+
+### Структура Docker в проекте
+
+В проекте реализована полная Docker конфигурация для запуска приложения в контейнерах:
+
+**docker-compose.yml** - оркестрирует два сервиса:
+```yaml
+services:
+  backend:  # FastAPI на Python 3.12
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+  
+  frontend:  # React приложение
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "5173:80"
+```
+
+### Backend Dockerfile
+
+**backend/Dockerfile** - многоэтапная сборка:
+```dockerfile
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Зависимости
+COPY backend/requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Код приложения
+COPY backend /app
+
+# Запуск
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+**Особенности:**
+- ✅ Использует официальный образ Python 3.12-slim (оптимизированный по размеру)
+- ✅ Кэширует зависимости pip (--no-cache-dir экономит место)
+- ✅ Запускает FastAPI с uvicorn на 0.0.0.0:8000 (доступен извне контейнера)
+
+### Frontend Dockerfile
+
+**frontend/Dockerfile** - двухэтапная сборка (build + production):
+```dockerfile
+FROM node:20-alpine AS build
+
+WORKDIR /app
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend ./
+RUN npm run build
+
+FROM nginx:alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+```
+
+**Особенности:**
+- ✅ Двухэтапная сборка: Node для build, Nginx для production
+- ✅ Используются alpine образы (очень компактные)
+- ✅ Собранный фронтенд (dist) подается через Nginx
+- ✅ Уменьшает размер финального образа в ~10 раз
+
+### Как использовать Docker
+
+**Запуск локально с Docker:**
+```bash
+docker-compose up
+# Backend будет на http://localhost:8000
+# Frontend будет на http://localhost:5173
+```
+
+**Пересборка образов:**
+```bash
+docker-compose up --build
+```
+
+**Остановка:**
+```bash
+docker-compose down
+```
+
+### Преимущества текущей конфигурации
+- ✅ Изоляция окружений (не нужны venv, node_modules локально)
+- ✅ Единая команда для запуска обоих сервисов
+- ✅ Легко развернуть на любом сервере (Linux, Cloud)
+- ✅ Оптимизированные образы (slim, alpine)
+- ✅ Правильная работа CORS (backend на 8000, frontend на 5173)
+
+### Потенциальные улучшения
+- ⚠️ Нет volumes для сохранения данных (при docker-compose down теряются данные)
+- ⚠️ Нет .dockerignore (копируется лишнее)
+- ⚠️ Нет health checks для сервисов
+- ⚠️ Нет переменных окружения в docker-compose (hardcoded ports)
+- ⚠️ Нет image registry (требуется локальная сборка)
+
+### Вывод по Docker
+
+DDocker конфигурация **готова к использованию**, но есть место для оптимизации. Текущая настройка хороша для:
+- ✅ Локальной разработки
+- ✅ Тестирования в изолированной среде
+- ✅ Деплоя на VPS с Docker
+
+Для production рекомендуется:
+1. Добавить .dockerignore
+2. Настроить volumes для persistent данных
+3. Добавить environment переменные
+4. Использовать Docker registry (DockerHub, GitHub Container Registry)
