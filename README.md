@@ -1,4 +1,5 @@
-Telegram Chat App
+# Telegram Chat App
+
 Telegram‑подобное веб‑приложение: список сообщений, просмотр истории и отправка новых сообщений через REST API. Фронтенд на React + TypeScript, бэкенд на FastAPI.​​
 
 Стек технологий
