@@ -2,14 +2,14 @@
 
 Telegram‑подобное веб‑приложение: список сообщений, просмотр истории и отправка новых сообщений через REST API. Фронтенд на React + TypeScript, бэкенд на FastAPI.​​
 
-Стек технологий
+## Стек технологий
 Backend: Python 3.12, FastAPI, Uvicorn.​
 
 Frontend: React, TypeScript, Vite.​
 
 Протокол: REST API, формат данных — JSON.
 
-Быстрый запуск (backend + frontend)
+## Быстрый запуск (backend + frontend)
 В корне проекта:
 
 bash
@@ -23,11 +23,12 @@ frontend (Vite) на http://localhost:5173
 
 Фронтенд по умолчанию обращается к API по адресу http://localhost:8000 (можно переопределить через переменную окружения VITE_API_URL в .env).​
 
-Запуск backend отдельно
+## Запуск backend отдельно
 bash
 cd backend
 python -m venv venv
 venv\Scripts\activate        # Windows (PowerShell/cmd)
+
 # или
 source venv/bin/activate     # Linux/macOS
 
@@ -35,14 +36,14 @@ pip install -r requirements.txt
 python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 Бэкенд будет доступен по адресу http://127.0.0.1:8000, документация OpenAPI — http://127.0.0.1:8000/docs.​
 
-Запуск frontend отдельно
+## Запуск frontend отдельно
 bash
 cd frontend
 npm install
 npm run dev
 По умолчанию приложение доступно по адресу http://localhost:5173.​
 
-Основной функционал
+## Основной функционал
 Отображение списка сообщений, полученных с бэкенда (GET /messages).​
 
 Отправка нового сообщения через форму (POST /messages).​
@@ -51,7 +52,7 @@ npm run dev
 
 Обновление списка сообщений после успешной отправки.​
 
-Структура проекта
+## Структура проекта
 backend/ — код FastAPI, файл main.py, модели и ручки API.​
 
 frontend/ — React‑приложение (Vite, TypeScript), компоненты интерфейса.​
