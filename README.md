@@ -62,4 +62,4 @@ PLAN.md / REVIEW.md — план и заметки по реализации т�
 ## Demo
 
 Frontend: https://telegram-chat-app-97tg.vercel.app/  
-Backend: http://localhost:8000
+Backend: не задеплоен, работает только локально по адресу http://localhost:8000 (для проверки API нужно поднять backend у себя, см. раздел «Запуск backend отдельно» выше).
