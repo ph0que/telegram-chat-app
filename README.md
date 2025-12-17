@@ -19,6 +19,7 @@ Render (backend)​
 
 Frontend (Vercel): https://telegram-chat-app-97tg.vercel.app
 Backend (Render): https://telegram-chat-app.onrender.com​
+
 Фронтенд ходит на прод‑бэкенд, CORS настроен на домен Vercel.​
 
 ## Быстрый запуск локально
