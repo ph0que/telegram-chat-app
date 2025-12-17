@@ -1,0 +1,2 @@
+echo .env>> frontend/.gitignore
+echo .env.local>> frontend/.gitignore
