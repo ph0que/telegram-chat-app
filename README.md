@@ -5,9 +5,13 @@
 ## Стек
 
 React, TypeScript, Vite
+
 FastAPI
+
 Axios
+
 Vercel (frontend)
+
 Render (backend)​
 
 ## Demo
