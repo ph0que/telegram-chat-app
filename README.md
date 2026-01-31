@@ -1,65 +1,125 @@
 # Telegram Chat App
 
-Telegram‑подобное веб‑приложение: список сообщений, просмотр истории и отправка новых сообщений через REST API. Фронтенд на React + TypeScript, бэкенд на FastAPI.​​
+Небольшое веб‑приложение для обмена сообщениями: список сообщений, просмотр истории и отправка новых сообщений через REST API. Фронтенд на React + TypeScript, бэкенд на FastAPI. Да, у меня к сожалению не получилось сделать точную копию телеграм чата, но небольшой чат сфромулировался корректно)
 
-## Стек технологий
-Backend: Python 3.12, FastAPI, Uvicorn.​
+Ниже я расписал всю структуру проекта для тестового задания.​​
 
-Frontend: React, TypeScript, Vite.​
+## Стек
 
-Протокол: REST API, формат данных — JSON.
+React, TypeScript, Vite
 
-## Быстрый запуск (backend + frontend)
-В корне проекта:
+FastAPI
+
+Axios
+
+Vercel (frontend)
+
+Render (backend)​
+
+## Demo
+
+Frontend (Vercel): https://telegram-chat-app-97tg.vercel.app
+Backend (Render): https://telegram-chat-app.onrender.com​
+
+Фронтенд ходит на прод‑бэкенд, CORS настроен на домен Vercel.​
+
+## Быстрый запуск локально
+Клонировать репозиторий и перейти в корень проекта:
+
+bash
+git clone https://github.com/ph0que/telegram-chat-app.git
+cd telegram-chat-app
+
+Установить зависимости и запустить фронтенд (Vite dev server):
 
 bash
 npm install
 npm run dev
-Скрипт npm run dev одновременно поднимает:
+По умолчанию фронтенд ожидает бэкенд на http://localhost:8000 (можно поменять через переменную окружения, см. ниже).​
 
-backend (FastAPI) на http://127.0.0.1:8000
+## Запуск backend (FastAPI)
+Перейти в папку backend и создать виртуальное окружение:
 
-frontend (Vite) на http://localhost:5173
-
-Фронтенд по умолчанию обращается к API по адресу http://localhost:8000 (можно переопределить через переменную окружения VITE_API_URL в .env).​
-
-## Запуск backend отдельно
 bash
 cd backend
 python -m venv venv
-venv\Scripts\activate        # Windows (PowerShell/cmd)
+source venv/bin/activate      # Linux / macOS
+venv\Scripts\activate         # Windows
+Установить зависимости и запустить сервер:
 
-# или
-source venv/bin/activate     # Linux/macOS
-
+bash
 pip install -r requirements.txt
-python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
-Бэкенд будет доступен по адресу http://127.0.0.1:8000, документация OpenAPI — http://127.0.0.1:8000/docs.​
+uvicorn main:app --reload
+Бэкенд поднимется на http://localhost:8000 и будет отдавать сообщения и принимать новые.​
 
 ## Запуск frontend отдельно
+Если нужно запускать фронтенд отдельно от корня:
+
 bash
 cd frontend
 npm install
 npm run dev
-По умолчанию приложение доступно по адресу http://localhost:5173.​
+Адрес API задаётся через переменную окружения VITE_API_URL (см. следующий раздел).​
 
-## Основной функционал
-Отображение списка сообщений, полученных с бэкенда (GET /messages).​
+## Переменные окружения
+Во фронтенде используется Vite, поэтому переменные окружения должны начинаться с префикса VITE_.​
 
-Отправка нового сообщения через форму (POST /messages).​
+Пример файла frontend/.env.local:
 
-Разделение сообщений «от меня» и «от собеседника» по флагу fromMe.​
+text
+VITE_API_URL=http://localhost:8000
 
-Обновление списка сообщений после успешной отправки.​
+Для прод‑окружения на Vercel VITE_API_URL указывает на Render‑бэкенд:
 
-## Структура проекта
-backend/ — код FastAPI, файл main.py, модели и ручки API.​
+text
+VITE_API_URL=https://telegram-chat-app.onrender.com
+Структура проекта
+text
+telegram-chat-app/
+  backend/
+    main.py          # FastAPI-приложение, CORS, endpoints для сообщений
+    requirements.txt # зависимости backend
+  frontend/
+    src/
+      components/    # React-компоненты интерфейса
+      api/           # работа с HTTP-запросами к backend
+      styles/        # стили
+    index.html
+    package.json
+  PLAN.md            # черновой план разработки
+  REVIEW.md          # заметки и ретроспектива по проекту
 
-frontend/ — React‑приложение (Vite, TypeScript), компоненты интерфейса.​
+backend/main.py содержит конфигурацию CORS, список origins включает прод‑домен Vercel, поэтому браузерные запросы к Render проходят без ошибок.
 
-PLAN.md / REVIEW.md — план и заметки по реализации тестового задания.
+## Деплой
 
-## Demo
+### Backend (Render)
 
-Frontend: https://telegram-chat-app-97tg.vercel.app/  
-Backend: не задеплоен, работает только локально по адресу http://localhost:8000 (для проверки API нужно поднять backend у себя, см. раздел «Запуск backend отдельно» выше).
+Бэкенд развёрнут на [Render](https://render.com). Текущий прод‑URL: https://telegram-chat-app.onrender.com
+
+Основные моменты настройки:
+
+- Тип сервиса: Web Service (Python/FastAPI).
+- Start command: `uvicorn main:app --host 0.0.0.0 --port 10000` (порт зависит от настроек Render).
+- Переменные окружения: стандартные для Python/uvicorn (при необходимости).
+
+CORS в `backend/main.py` настроен так, чтобы разрешать запросы с прод‑домена фронтенда на Vercel.
+
+### Frontend (Vercel)
+
+Фронтенд развёрнут на [Vercel](https://vercel.com). Прод‑URL: https://telegram-chat-app-97tg.vercel.app
+
+Основные моменты настройки:
+
+- Framework: Vite (React + TypeScript).
+- Build Command: `npm run build`.
+- Output Directory: `dist`.
+- Environment Variables:
+  - `VITE_API_URL=https://telegram-chat-app.onrender.com`
+
+После деплоя Vercel подставляет `VITE_API_URL` на этапе сборки, и фронтенд ходит к прод‑бэкенду на Render.
+
+
+
+
+
