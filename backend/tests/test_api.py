@@ -1,6 +1,5 @@
 import pytest
 from httpx import AsyncClient
-
 from backend.main import app
 
 
@@ -20,7 +19,7 @@ async def test_get_messages_initial():
 
     data = resp.json()
     assert isinstance(data, list)
-    assert len(data) >= 3  # у тебя в памяти три стартовых сообщения
+    assert len(data) >= 3
     first = data[0]
     assert {"id", "text", "fromMe", "timestamp"} <= set(first.keys())
 
