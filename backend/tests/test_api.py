@@ -38,3 +38,4 @@ def test_messages_list_grows_after_post():
     count_after = len(resp_after.json())
     
     assert count_after == count_before + 1
+    
